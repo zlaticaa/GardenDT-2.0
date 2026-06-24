@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Policies;
@@ -12,25 +13,22 @@ public class GardenAgent : Agent
     private PillarMath mathComponent;
     private List<Vector3> allBuildings = new();
     private List<Vector3> allFloors = new();
+    [SerializeField] private float scoreBase = 10;
+    [SerializeField] private float pillar1Mult;
+    [SerializeField] private float pillar2Mult;
+    [SerializeField] private float pillar3Mult;
+    [SerializeField] private float pillar4Mult;
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        CheckLists();
-
-        foreach (var building in allBuildings)
-        {
-            sensor.AddObservation(building);
-            observationsCounter++;
-        }
-
-        foreach(var floor in allFloors)
-        {
-            sensor.AddObservation(floor);
-            observationsCounter++;
-        }
-        Debug.Log("Nr of observations: " + observationsCounter);
-
-        this.gameObject.GetComponent<BehaviorParameters>().BrainParameters.VectorObservationSize = observationsCounter;
+        mathComponent.Recalculate();
+        sensor.AddObservation(mathComponent.Pillar1Score);
+        sensor.AddObservation(mathComponent.Pillar2Score);
+        sensor.AddObservation(mathComponent.Pillar3Score);
+        sensor.AddObservation(mathComponent.Pillar4Score);
+        
+        
+        
     }
 
     public override void OnActionReceived(ActionBuffers actions)
