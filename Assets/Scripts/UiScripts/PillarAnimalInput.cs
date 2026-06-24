@@ -10,10 +10,10 @@ public class PillarAnimalInput : MonoBehaviour
 
     public void ApplyValues()
     {
-        PillarSettings.nrOfInsects = Parse(insectsInput);
-        PillarSettings.nrOfBirds = Parse(birdsInput);
-        PillarSettings.nrOfSpiders = Parse(spidersInput);
-        PillarSettings.nrOfOtherAnimals = Parse(otherAnimalsInput);
+        PillarSettings.Insects = Parse(insectsInput) >0;
+        PillarSettings.Birds = Parse(birdsInput) >0;
+        PillarSettings.Spiders = Parse(spidersInput) >0;
+        PillarSettings.OtherAnimals = Parse(otherAnimalsInput) >0;
 
         //pillarMath.Recalculate();  
     }
