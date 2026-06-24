@@ -14,6 +14,8 @@ public class GardenAgent : Agent
     private List<int> allBuildingIds = new();
     private List<Vector3> allFloors = new();
     private List<int> allFloorIds = new();
+
+    [SerializeField] private BuildingSystem buildSystem;
     [SerializeField] private List<BuildingData> buildings = new();
     [SerializeField] private List<FloorData> floors = new();
     [SerializeField] private float scoreBase = 10;
@@ -21,13 +23,16 @@ public class GardenAgent : Agent
     [SerializeField] private float pillar2Mult;
     [SerializeField] private float pillar3Mult;
     [SerializeField] private float pillar4Mult;
+    [SerializeField] private int width = 3;
+    [SerializeField] private int height = 3;
 
     private int steps;
     private const int MAX_STEPS = 300;
-    private const int totalTiles = 3 * 3;
+    private int totalTiles;
 
     public void Start()
     {
+        totalTiles = height* width;
         steps = 0;
     }
 
@@ -36,7 +41,7 @@ public class GardenAgent : Agent
         steps = 0;
         allBuildings.Clear();
         allFloors.Clear();
-        //add reload floor/grid
+        buildSystem.ResetBuilds();
         mathComponent.Recalculate();
     }
 
@@ -50,16 +55,22 @@ public class GardenAgent : Agent
 
         for (int i = 0; i < totalTiles; i++)
         {
-            if (allBuildingIds.Count <= i && allBuildings.Count <= i)
+            if (allBuildings != null)
             {
-                sensor.AddObservation(allBuildingIds[i]);
-                sensor.AddObservation(allBuildings[i]);
+                if (allBuildingIds.Count <= i && allBuildings.Count <= i)
+                {
+                    sensor.AddObservation(allBuildingIds[i]);
+                    sensor.AddObservation(allBuildings[i]);
+                }
             }
 
-            if (allFloors.Count <= i && allFloors.Count <= i)
+            if (allFloors != null)
             {
-                sensor.AddObservation(allFloors[i]);
-                sensor.AddObservation(allFloorIds[i]);
+                if (allFloors.Count <= i && allFloors.Count <= i)
+                {
+                    sensor.AddObservation(allFloors[i]);
+                    sensor.AddObservation(allFloorIds[i]);
+                }
             }
         }
         
@@ -67,11 +78,25 @@ public class GardenAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        // Benodigde acties:
-        //  plaats boom, bosje, bloem, moestuin, trampoline, tegels, grind, doorlektegels, zand, grond, gras, water -> discrete actie
+        steps++;
+        float StartP1 = mathComponent.Pillar1Score;
+        float StartP2 = mathComponent.Pillar2Score;
+        float StartP3 = mathComponent.Pillar3Score;
+        float StartP4 = mathComponent.Pillar4Score;
+        
+        Vector3 pos = new Vector3(actions.DiscreteActions[0], actions.DiscreteActions[1], actions.DiscreteActions[2]);
+        int buildingId = actions.DiscreteActions[3];
+        int floorId = actions.DiscreteActions[4];
 
-        // Pseudo
-        // float actionTree = actionBuffers.DiscreetActions[0];
+        if(buildingId >= 0 && buildingId < buildings.Count) buildSystem.SetBuilding(pos, buildings[buildingId]);
+        if(floorId >= 0 && floorId < floors.Count) buildSystem.SetFloor(pos - new Vector3(0f,-0.5f,0f), floors[floorId]);
+        mathComponent.Recalculate();
+        float p1Reward = scoreBase * (mathComponent.Pillar1Score - StartP1) * pillar1Mult;
+        float p2Reward = scoreBase * (mathComponent.Pillar2Score - StartP2) * pillar2Mult;
+        float p3Reward = scoreBase * (mathComponent.Pillar3Score - StartP3) * pillar3Mult;
+        float p4Reward = scoreBase * (mathComponent.Pillar4Score - StartP4) * pillar4Mult;
+        SetReward(p1Reward+p2Reward+p3Reward+p4Reward);
+        if(steps > MAX_STEPS) EndEpisode();
     }
 
     private void CheckLists()
