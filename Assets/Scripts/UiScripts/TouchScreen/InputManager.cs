@@ -44,6 +44,8 @@ public class InputManager : MonoBehaviour
 
         Vector2 pos = touchSystem.Touch.TouchPosition.ReadValue<Vector2>();
 
+        Debug.Log($"[INPUT] TOUCH END Position: {pos}");
+
         onStartTouch?.Invoke(pos, (float)context.startTime);
     }
 
@@ -52,6 +54,9 @@ public class InputManager : MonoBehaviour
         if (!isDragging) return;
 
         Vector2 pos = context.ReadValue<Vector2>();
+
+        Debug.Log($"[INPUT] TOUCH END  Position: {pos}");
+
         onDrag?.Invoke(pos);
     }
 
@@ -60,6 +65,9 @@ public class InputManager : MonoBehaviour
         isDragging = false;
 
         Vector2 pos = touchSystem.Touch.TouchPosition.ReadValue<Vector2>();
+
+        Debug.Log($"[INPUT] TOUCH END  Position: {pos}");
+
 
         onEndTouch?.Invoke(pos, (float)context.time);
     }
