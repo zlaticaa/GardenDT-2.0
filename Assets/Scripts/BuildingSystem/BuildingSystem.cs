@@ -364,14 +364,56 @@ public class BuildingSystem : MonoBehaviour
         SpawnBuilding(trampData);
     }
 
-    public void SpawnFloor()
+    public void SpawnFloor(FloorData data)
     {
         Vector3 pointerPos = GetCurrentPointerWorldPosition();
 
         ClearCurrentPreview();
 
-        floorPreview = CreateFloorPreview(dirtData, pointerPos);
+        floorPreview = CreateFloorPreview(data, pointerPos);
         pillarMath.Recalculate();
+    }
+
+
+
+    public void SpawnDirt()
+    {
+        SpawnFloor(dirtData);
+    }
+
+    public void SpawnWater()
+    {
+        SpawnFloor(waterData);
+    }
+
+    public void SpawnGravel()
+    {
+        SpawnFloor(gravelData);
+    }
+
+    public void SpawnNoBuild()
+    {
+        SpawnFloor(noBuildData);
+    }
+
+    public void SpawnGrass()
+    {
+        SpawnFloor(grassData);
+    }
+
+    public void SpawnSand()
+    {
+        SpawnFloor(sandData);
+    }
+
+    public void SpawnTile()
+    {
+        SpawnFloor(tileData);
+    }
+
+    public void SpawnLeak()
+    {
+        SpawnFloor(leakThroughTileData);
     }
 
 
