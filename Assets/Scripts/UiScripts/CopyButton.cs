@@ -9,13 +9,10 @@ public class CopyButton : MonoBehaviour
 {
     [SerializeField] private BuildingSystem _buildings; 
     [SerializeField] private FloorBuilding _floor;
-    private Button _copyButton;
-    [SerializeField] private UIDocument _document;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _copyButton = _document.rootVisualElement.Q<Button>("CopyButton");
-        _copyButton.clicked += copyClick;
         
     }
 
@@ -26,21 +23,29 @@ public class CopyButton : MonoBehaviour
         foreach (var building in _buildings.GetAllBuildings())
         {
             print("object");
-            ObjectDTO buildDTO = new ObjectDTO(building.transform.position, building.data.name);
+            ObjectDTO buildDTO = new ObjectDTO(building.transform.position, building.GetData().name);
             Wrapper.data.objects.Add(buildDTO);
         }
 
-        foreach (var tile in _floor.Tiles )
+        foreach (var tile in _buildings.GetAllFloors())
         {
             print("tile");
-            ObjectDTO tileDTO = new ObjectDTO(tile.transform.position, tile.gameObject.name);
+            ObjectDTO tileDTO = new ObjectDTO(tile.transform.position, tile.GetData().name);
             Wrapper.data.tiles.Add(tileDTO);
         }
-        print("Copied");
-        TextEditor te = new TextEditor();
-        te.text = JsonConvert.SerializeObject(Wrapper.data, Formatting.Indented);
-        te.SelectAll();
-        te.Copy();
+
+        Wrapper.data.AmountOfPlants = PillarSettings.nrOfPlants;
+        Wrapper.data.Birds = PillarSettings.Birds;
+        Wrapper.data.Insects = PillarSettings.Insects;
+        Wrapper.data.Spiders = PillarSettings.Spiders;
+        Wrapper.data.Others = PillarSettings.OtherAnimals;
+        Wrapper.data.Cleanup = PillarSettings.cleanup;
+        Wrapper.data.Fertilizer = PillarSettings.fertilizer;
+        Wrapper.data.GridHeight = Support.GridHeight;
+        Wrapper.data.GridWidth = Support.GridWidth;
+        PlayerPrefs.SetString("save",JsonConvert.SerializeObject(Wrapper.data, Formatting.Indented));
+        PlayerPrefs.Save();
+       
         
     }
     // Update is called once per frame

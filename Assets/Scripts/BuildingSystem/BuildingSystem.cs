@@ -32,8 +32,8 @@ public class BuildingSystem : MonoBehaviour
 
     private List<BuildingShapeUnit> shapeUnits = new();
 
-    private BuildingPreview buildingPreview;
-    private BuildingPreview floorPreview;
+    public BuildingPreview buildingPreview;
+    public BuildingPreview floorPreview;
 
     private List<Building> allBuildings = new();
     private List<FloorBuilding> allFloors = new();
@@ -112,7 +112,7 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
-    private void HandleBuildingPreview(Vector3 mouseWorldPos)
+    public void HandleBuildingPreview(Vector3 mouseWorldPos, bool force = false)
     {
         buildingPreview.transform.position = mouseWorldPos;
         List<Vector3> buildPositions = buildingPreview.buildingModel.GetAllBuildingPositions();
@@ -122,7 +122,7 @@ public class BuildingSystem : MonoBehaviour
         {
             buildingPreview.transform.position = GetSnappedCentrePosition(buildPositions);
             buildingPreview.ChangeState(Support.PreviewState.Positive);
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) || force)
             {
                 foreach(var vec in buildPositions)
                 {
@@ -143,7 +143,7 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
-    private void HandleFloorPreview(Vector3 mouseWorldPos)
+    public void HandleFloorPreview(Vector3 mouseWorldPos, bool force = false)
     {
         floorPreview.transform.position = mouseWorldPos;
         List<Vector3> buildPositions = floorPreview.buildingModel.GetAllBuildingPositions();
@@ -152,7 +152,7 @@ public class BuildingSystem : MonoBehaviour
         {
             floorPreview.transform.position = GetSnappedCentrePosition(buildPositions);
             floorPreview.ChangeState(Support.PreviewState.Positive);
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) || force)
             {
                 PlaceFloor(buildPositions);
             }
@@ -276,13 +276,13 @@ public class BuildingSystem : MonoBehaviour
         return Vector3.zero;
     }
 
-    private BuildingPreview CreateBuildingPreview(BuildingData data, Vector3 position)
+    public BuildingPreview CreateBuildingPreview(BuildingData data, Vector3 position)
     {
         BuildingPreview buildingPreview = Instantiate(previewPrefab, position, Quaternion.identity);
         buildingPreview.Setup(data);
         return buildingPreview;
     }
-    private BuildingPreview CreateFloorPreview(FloorData data, Vector3 position)
+    public BuildingPreview CreateFloorPreview(FloorData data, Vector3 position)
     {
         BuildingPreview floorPreview = Instantiate(previewPrefab, position, Quaternion.identity);
         floorPreview.Setup(data);
