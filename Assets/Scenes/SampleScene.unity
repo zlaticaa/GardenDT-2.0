@@ -1134,6 +1134,7 @@ Transform:
   - {fileID: 1289650834}
   - {fileID: 239258363}
   - {fileID: 327283155}
+  - {fileID: 1243925857}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &319792806
@@ -4585,6 +4586,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1236977213}
   m_CullTransparentMesh: 1
+--- !u!1 &1243925856
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1243925857}
+  - component: {fileID: 1243925858}
+  m_Layer: 0
+  m_Name: TouchScreenManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1243925857
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243925856}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 284308597}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1243925858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243925856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9ee9ad4275cef8449f62eafccf756c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputManager
 --- !u!1 &1259684744
 GameObject:
   m_ObjectHideFlags: 0
@@ -4955,10 +5000,10 @@ MonoBehaviour:
   allFloors: []
   fertilizer: 8
   cleanupStyle: 1
-  nrOfInsects: 0
-  nrOfBirds: 0
-  nrOfSpiders: 0
-  nrOfOtherAnimals: 0
+  Insects: 0
+  Birds: 0
+  Spiders: 0
+  OtherAnimals: 0
   nrOfPlantTypes: 0
 --- !u!1 &1306642070
 GameObject:
@@ -5712,6 +5757,9 @@ MonoBehaviour:
   floorBuildingPrefab: {fileID: 6277748477459651085, guid: 79ccb467ad9272c43acedf947ec0b740, type: 3}
   grid: {fileID: 1727710357}
   standardFloor: {fileID: 6277748477459651085, guid: 79ccb467ad9272c43acedf947ec0b740, type: 3}
+  buildingPreview: {fileID: 0}
+  floorPreview: {fileID: 0}
+  inputManager: {fileID: 1243925858}
 --- !u!1 &1510500145
 GameObject:
   m_ObjectHideFlags: 0
