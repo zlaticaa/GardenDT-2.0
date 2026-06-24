@@ -95,7 +95,7 @@ public class GardenAgent : Agent
         float p2Reward = scoreBase * (mathComponent.Pillar2Score - StartP2) * pillar2Mult;
         float p3Reward = scoreBase * (mathComponent.Pillar3Score - StartP3) * pillar3Mult;
         float p4Reward = scoreBase * (mathComponent.Pillar4Score - StartP4) * pillar4Mult;
-        SetReward(p1Reward+p2Reward+p3Reward+p4Reward);
+        AddReward(p1Reward+p2Reward+p3Reward+p4Reward);
         if(steps > MAX_STEPS) EndEpisode();
     }
 

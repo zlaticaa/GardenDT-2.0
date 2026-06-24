@@ -4102,7 +4102,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2bec5d0598302de40b3345594ce8d3f9, type: 2}
   - {fileID: 11400000, guid: f07e20720725a0e4585c340eeaf4a0b8, type: 2}
   - {fileID: 11400000, guid: f447b10262944704bb6f4f692a0a5dec, type: 2}
-  scoreBase: 10
+  scoreBase: 100
   pillar1Mult: 1
   pillar2Mult: 1
   pillar3Mult: 1
