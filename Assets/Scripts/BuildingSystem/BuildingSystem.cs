@@ -3,6 +3,8 @@ using System.Linq;
 using UnityEngine;
 
 
+
+//Garden 2
 public class BuildingSystem : MonoBehaviour
 {
     public const float cellSize = 1f;
@@ -32,11 +34,18 @@ public class BuildingSystem : MonoBehaviour
 
     private List<BuildingShapeUnit> shapeUnits = new();
 
-    private BuildingPreview buildingPreview;
-    private BuildingPreview floorPreview;
+    public BuildingPreview buildingPreview;
+    public BuildingPreview floorPreview;
 
     private List<Building> allBuildings = new();
     private List<FloorBuilding> allFloors = new();
+
+
+    //Fields for the touch system
+    [SerializeField] private InputManager inputManager;
+
+    private Vector2 currentTouchPosition;
+    private bool touchReleasedThisFrame;
 
     private void Start()
     {
@@ -45,74 +54,76 @@ public class BuildingSystem : MonoBehaviour
 
     private void Update()
     {
-        Vector3 mousePos = GetWorldMousePosition();
+        Vector3 pointerPos = GetCurrentPointerWorldPosition();
 
-        if(buildingPreview != null)
+        if (buildingPreview != null)
         {
-            HandleBuildingPreview(mousePos);
+            HandleBuildingPreview(pointerPos);
         }
-        else if(floorPreview != null)
+        else if (floorPreview != null)
         {
-            HandleFloorPreview(mousePos);
+            HandleFloorPreview(pointerPos);
         }
         else
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                buildingPreview = CreateBuildingPreview(treeData, mousePos);
+                buildingPreview = CreateBuildingPreview(treeData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                buildingPreview = CreateBuildingPreview(bushData, mousePos);
+                buildingPreview = CreateBuildingPreview(bushData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                buildingPreview = CreateBuildingPreview(flowerData, mousePos);
+                buildingPreview = CreateBuildingPreview(flowerData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha4))
             {
-                buildingPreview = CreateBuildingPreview(vegGarData, mousePos);
+                buildingPreview = CreateBuildingPreview(vegGarData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha5))
             {
-                buildingPreview = CreateBuildingPreview(trampData, mousePos);
+                buildingPreview = CreateBuildingPreview(trampData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha6))
             {
-                floorPreview = CreateFloorPreview(waterData, mousePos);
+                floorPreview = CreateFloorPreview(waterData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha7))
             {
-                floorPreview = CreateFloorPreview(gravelData, mousePos);
+                floorPreview = CreateFloorPreview(gravelData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha8))
             {
-                floorPreview = CreateFloorPreview(noBuildData, mousePos);
+                floorPreview = CreateFloorPreview(noBuildData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha9))
             {
-                floorPreview = CreateFloorPreview(dirtData, mousePos);
+                floorPreview = CreateFloorPreview(dirtData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.G))
             {
-                floorPreview = CreateFloorPreview(grassData, mousePos);
+                floorPreview = CreateFloorPreview(grassData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.S))
             {
-                floorPreview = CreateFloorPreview(sandData, mousePos);
+                floorPreview = CreateFloorPreview(sandData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.T))
             {
-                floorPreview = CreateFloorPreview(tileData, mousePos);
+                floorPreview = CreateFloorPreview(tileData, pointerPos);
             }
             else if (Input.GetKeyDown(KeyCode.L))
             {
-                floorPreview = CreateFloorPreview(leakThroughTileData, mousePos);
+                floorPreview = CreateFloorPreview(leakThroughTileData, pointerPos);
             }
         }
+
+        touchReleasedThisFrame = false;
     }
 
-    private void HandleBuildingPreview(Vector3 mouseWorldPos)
+    public void HandleBuildingPreview(Vector3 mouseWorldPos, bool force = false)
     {
         buildingPreview.transform.position = mouseWorldPos;
         List<Vector3> buildPositions = buildingPreview.buildingModel.GetAllBuildingPositions();
@@ -122,12 +133,14 @@ public class BuildingSystem : MonoBehaviour
         {
             buildingPreview.transform.position = GetSnappedCentrePosition(buildPositions);
             buildingPreview.ChangeState(Support.PreviewState.Positive);
-            if (Input.GetMouseButtonDown(0))
+
+            if (Input.GetMouseButtonDown(0) || touchReleasedThisFrame || force)
             {
-                foreach(var vec in buildPositions)
+                foreach (var vec in buildPositions)
                 {
-                    print("building position" + vec);
+                    print("building position " + vec);
                 }
+
                 PlaceBuilding(buildPositions);
             }
         }
@@ -143,7 +156,7 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
-    private void HandleFloorPreview(Vector3 mouseWorldPos)
+    public void HandleFloorPreview(Vector3 mouseWorldPos, bool force = false)
     {
         floorPreview.transform.position = mouseWorldPos;
         List<Vector3> buildPositions = floorPreview.buildingModel.GetAllBuildingPositions();
@@ -152,7 +165,7 @@ public class BuildingSystem : MonoBehaviour
         {
             floorPreview.transform.position = GetSnappedCentrePosition(buildPositions);
             floorPreview.ChangeState(Support.PreviewState.Positive);
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) || touchReleasedThisFrame || force)
             {
                 PlaceFloor(buildPositions);
             }
@@ -276,13 +289,13 @@ public class BuildingSystem : MonoBehaviour
         return Vector3.zero;
     }
 
-    private BuildingPreview CreateBuildingPreview(BuildingData data, Vector3 position)
+    public BuildingPreview CreateBuildingPreview(BuildingData data, Vector3 position)
     {
         BuildingPreview buildingPreview = Instantiate(previewPrefab, position, Quaternion.identity);
         buildingPreview.Setup(data);
         return buildingPreview;
     }
-    private BuildingPreview CreateFloorPreview(FloorData data, Vector3 position)
+    public BuildingPreview CreateFloorPreview(FloorData data, Vector3 position)
     {
         BuildingPreview floorPreview = Instantiate(previewPrefab, position, Quaternion.identity);
         floorPreview.Setup(data);
@@ -318,11 +331,11 @@ public class BuildingSystem : MonoBehaviour
 
     private void SpawnBuilding(BuildingData data)
     {
-        Vector3 mousePos = GetWorldMousePosition();
+        Vector3 pointerPos = GetCurrentPointerWorldPosition();
 
         ClearCurrentPreview();
 
-        buildingPreview = CreateBuildingPreview(data, mousePos);
+        buildingPreview = CreateBuildingPreview(data, pointerPos);
         pillarMath.Recalculate();
     }
 
@@ -353,11 +366,85 @@ public class BuildingSystem : MonoBehaviour
 
     public void SpawnFloor()
     {
-        Vector3 mousePos = GetWorldMousePosition();
+        Vector3 pointerPos = GetCurrentPointerWorldPosition();
 
         ClearCurrentPreview();
 
-        floorPreview = CreateFloorPreview(dirtData, mousePos);
+        floorPreview = CreateFloorPreview(dirtData, pointerPos);
         pillarMath.Recalculate();
+    }
+
+
+    //Methods for the touch system
+
+    private bool HasTouchInput()
+    {
+       return currentTouchPosition != Vector2.zero;
+        
+    }
+
+    private Vector3 GetCurrentPointerWorldPosition()
+    {
+        if (HasTouchInput())
+        {
+            return GetWorldTouchPosition();
+        }
+
+        return GetWorldMousePosition();
+    }
+
+    private Vector3 GetWorldTouchPosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(currentTouchPosition);
+
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+
+        if (groundPlane.Raycast(ray, out float distance))
+        {
+            return ray.GetPoint(distance);
+        }
+
+        return Vector3.zero;
+    }
+
+    private void OnEnable()
+    {
+        if (inputManager == null) return;
+
+        inputManager.onStartTouch += OnTouchStart;
+        inputManager.onDrag += OnTouchDrag;
+        inputManager.onEndTouch += OnTouchEnd;
+    }
+
+    private void OnDisable()
+    {
+        if (inputManager == null) return;
+
+        inputManager.onStartTouch -= OnTouchStart;
+        inputManager.onDrag -= OnTouchDrag;
+        inputManager.onEndTouch -= OnTouchEnd;
+    }
+
+    private void OnTouchStart(Vector2 position, float time)
+    {
+
+        Debug.Log($"[BUILDING] Touch Start: {position}");
+        currentTouchPosition = position;
+    }
+
+    private void OnTouchDrag(Vector2 position)
+    {
+        Debug.Log($"[BUILDING] Touch Drag: {position}");
+
+        currentTouchPosition = position;
+    }
+
+    private void OnTouchEnd(Vector2 position, float time)
+    {
+
+        Debug.Log($"[BUILDING] Touch End: {position}");
+
+        currentTouchPosition = position;
+        touchReleasedThisFrame = true;
     }
 }

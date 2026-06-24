@@ -18,10 +18,10 @@ public class PillarMath : MonoBehaviour
     public fertilizerCleanupType fertilizer;
     public fertilizerCleanupType cleanupStyle;
 
-    public int nrOfInsects;
-    public int nrOfBirds;
-    public int nrOfSpiders;
-    public int nrOfOtherAnimals;
+    public bool Insects;
+    public bool Birds;
+    public bool Spiders;
+    public bool OtherAnimals;
     private int totalPlants;
 
     public int nrOfPlantTypes;
@@ -39,10 +39,13 @@ public class PillarMath : MonoBehaviour
 
     private void ReloadAndCalculate()
     {
-        nrOfInsects = PillarSettings.nrOfInsects;
-        nrOfBirds = PillarSettings.nrOfBirds;
-        nrOfSpiders = PillarSettings.nrOfSpiders;
-        nrOfOtherAnimals = PillarSettings.nrOfOtherAnimals;
+        Insects = PillarSettings.Insects;
+        Birds = PillarSettings.Birds;
+        Spiders = PillarSettings.Spiders;
+        OtherAnimals = PillarSettings.OtherAnimals;
+        fertilizer = PillarSettings.fertilizer; 
+        cleanupStyle = PillarSettings.cleanup;
+        nrOfPlantTypes = PillarSettings.nrOfPlants;
 
         allBuildings = bSystem.GetAllBuildings();
         allFloors = bSystem.GetAllFloors();
@@ -51,7 +54,9 @@ public class PillarMath : MonoBehaviour
 
         GetAllNumbers(allBuildings, allFloors);
         CalculateAllPillars();
-
+        
+        Debug.Log((allBuildings.Count+ allFloors.Count) + " = " + totalArea + "; " + (totalPlants/totalArea));
+        
         FindFirstObjectByType<PillarUI>()?.UpdateUI();
     }
 
@@ -70,12 +75,12 @@ public class PillarMath : MonoBehaviour
     public void CalculatePillar2()
     {
 
-         pillar2Score = StaticFormulas.P2Soil(fertilizer, cleanupStyle);
+         pillar2Score = StaticFormulas.P2Soil(fertilizer, cleanupStyle,totalPlants,totalArea);
     }
 
     public void CalculatePillar3()
     {
-        pillar3Score = StaticFormulas.P3Environment(nrOfInsects, nrOfBirds, nrOfSpiders, nrOfOtherAnimals, totalPlants, totalArea);
+        pillar3Score = StaticFormulas.P3Environment(Insects, Birds, Spiders, OtherAnimals, totalPlants, totalArea);
     }
 
     public void CalculatePillar4()
@@ -117,10 +122,14 @@ public class PillarMath : MonoBehaviour
         {
             foreach (FloorBuilding floor in allFloors)
             {
+                if (floor == null)
+                    continue;
+
                 if ((building.transform.position - new Vector3(0, 0.5f, 0)) == floor.transform.position)
                 {
                     allFloorsCopy.Remove(floor);
                 }
+
             }
         }
 
@@ -140,6 +149,14 @@ public class PillarMath : MonoBehaviour
 
     private void GetAllNumbers(List<Building> allBuildings, List<FloorBuilding> allFloorsCopy)
     {
+        nrOfPaved = 0;
+        nrOfUnpaved = 0;
+        nrOfLeakThrough = 0;
+        nrOfFlower = 0;
+        nrOfGrass = 0;
+        nrOfBush = 0;
+        nrOfTree = 0;
+        totalPlants = 0;
         foreach (Building building in allBuildings)
         {
             if (building.GetData().floorType == Support.FloorType.Paved)
@@ -209,28 +226,16 @@ public class PillarMath : MonoBehaviour
             }
         }
         Debug.Log("All numbers (paved, leak through, unpaved, grass, flower, bush, tree " + nrOfPaved + ", " + nrOfLeakThrough + ", " + nrOfUnpaved + ", " + nrOfGrass + ", " + nrOfFlower + ", " + nrOfBush + ", " + nrOfTree);
-    }
 
-    public float GetPillar1Score()
-    {
-        return pillar1Score;
-    }
-    public float GetPillar2Score()
-    {
-        return pillar2Score;
-    }
-    public float GetPillar3Score()
-    {
-        return pillar3Score;
-    }
-    public float GetPillar4Score()
-    {
-        return pillar4Score;
+
+       
+
     }
     public List<Building> GetAllBuildings()
     {
         return allBuildings;
     }
+
     public List<FloorBuilding> GetAllFloors()
     {
         return allFloors;
