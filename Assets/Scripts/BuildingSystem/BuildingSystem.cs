@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 
@@ -49,6 +50,23 @@ public class BuildingSystem : MonoBehaviour
 
     private void Start()
     {
+        InstantiateFloor();
+    }
+
+    public void ResetBuilds()
+    {
+        foreach (var building in allBuildings)
+        {
+            Destroy(building.gameObject);
+        }
+
+        foreach (var floor in allFloors)
+        {
+            Destroy(floor.gameObject);
+        }
+        allBuildings.Clear();
+        allFloors.Clear();
+        grid.CreateEmptyGrid();
         InstantiateFloor();
     }
 
@@ -148,6 +166,7 @@ public class BuildingSystem : MonoBehaviour
         {
             buildingPreview.ChangeState(Support.PreviewState.Negative);
         }
+        
 
         if (Input.GetKeyDown(KeyCode.Delete))
         {
@@ -156,6 +175,30 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
+    public void SetBuilding(Vector3 pos, BuildingData data)
+    {
+        BuildingPreview preview = CreateBuildingPreview(data, pos);
+        List<Vector3> buildPositions = preview.buildingModel.GetAllBuildingPositions();
+        bool canBuild = grid.CanBuildBuilding(buildPositions);
+        if (canBuild)
+        {
+            Building build = Instantiate(buildingPrefab, GetSnappedCentrePosition(buildPositions), Quaternion.identity);
+            build.Setup(data);
+            grid.SetBuilding(build, buildPositions);
+            allBuildings.Add(build);
+        }
+    }
+
+    public void SetFloor(Vector3 pos, FloorData data)
+    {
+       BuildingPreview preview = CreateFloorPreview(data, pos);
+       List<Vector3> buildPositions = preview.buildingModel.GetAllBuildingPositions();
+       FloorBuilding floor = Instantiate(floorBuildingPrefab, GetSnappedCentrePosition(buildPositions), Quaternion.identity);
+       floor.Setup(data);
+       floor.transform.position -= new Vector3(0f, 0.5f, 0f);
+       grid.SetFloor(floor,buildPositions);
+       allFloors.Add(floor);
+    }
     public void HandleFloorPreview(Vector3 mouseWorldPos, bool force = false)
     {
         floorPreview.transform.position = mouseWorldPos;
