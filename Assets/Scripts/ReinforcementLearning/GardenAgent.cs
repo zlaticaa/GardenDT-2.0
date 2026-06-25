@@ -35,6 +35,13 @@ public class GardenAgent : Agent
     {
         totalTiles = height* width;
         steps = 0;
+        PillarSettings.Insects = true;
+        PillarSettings.Birds = true;
+        PillarSettings.Spiders =  true;
+        PillarSettings.OtherAnimals =  true;
+        PillarSettings.cleanup = fertilizerCleanupType.CleanAll;
+        PillarSettings.fertilizer = fertilizerCleanupType.BioFertilizer;
+        PillarSettings.nrOfPlants = 20;
     }
 
     public override void OnEpisodeBegin()
