@@ -6,6 +6,7 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using Math = Unity.Mathematics.Geometry.Math;
 
 public class GardenAgent : Agent
 {
@@ -87,13 +88,13 @@ public class GardenAgent : Agent
         float StartP3 = mathComponent.Pillar3Score;
         float StartP4 = mathComponent.Pillar4Score;
         
-        Vector3 pos = new Vector3(MiddlePos.x +  actions.DiscreteActions[0], MiddlePos.y + actions.DiscreteActions[1], MiddlePos.z + actions.DiscreteActions[2]);
-        int buildingId = actions.DiscreteActions[3];
-        int floorId = actions.DiscreteActions[4];
+        Vector3 pos = new Vector3(MiddlePos.x +  actions.DiscreteActions[0], 0 , MiddlePos.z + actions.DiscreteActions[1]);
+        int buildingId = Mathf.FloorToInt( actions.DiscreteActions[2]);
+        int floorId = Mathf.FloorToInt(actions.DiscreteActions[3]);
         bool build = false;
         
         if(buildingId >= 0 && buildingId < buildings.Count) build = buildSystem.SetBuilding(pos, buildings[buildingId]);
-        if(floorId >= 0 && floorId < floors.Count) buildSystem.SetFloor(pos - new Vector3(0f,-0.5f,0f), floors[floorId]);
+        if(floorId >= 0 && floorId < floors.Count) buildSystem.SetFloor(pos - new Vector3(0f,0.0f,0f), floors[floorId]);
         
         mathComponent.Recalculate();
         float p1Reward = scoreBase * (mathComponent.Pillar1Score - StartP1) * pillar1Mult;
@@ -101,17 +102,11 @@ public class GardenAgent : Agent
         float p3Reward = scoreBase * (mathComponent.Pillar3Score - StartP3) * pillar3Mult;
         float p4Reward = scoreBase * (mathComponent.Pillar4Score - StartP4) * pillar4Mult;
         
-        if(build) AddReward(80);
-        else if (allBuildings.Count < 9) AddReward(-30);
-        if (p1Reward + p2Reward + p3Reward + p4Reward < 10 )
-        {
-        }
-        else
-        { 
-            AddReward(p1Reward+p2Reward+p3Reward+p4Reward);
-
-        }
+        if(build) AddReward(0.8f);
+        else if (allBuildings.Count < 9) AddReward(-0.3f); 
+        AddReward(p1Reward+p2Reward+p3Reward+p4Reward);
         if(steps > MAX_STEPS) EndEpisode();
+        if(allBuildings.Count >= 9)  EndEpisode();
     }
 
     private void CheckLists()

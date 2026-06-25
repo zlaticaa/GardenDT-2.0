@@ -187,6 +187,7 @@ public class BuildingSystem : MonoBehaviour
             build.Setup(data);
             grid.SetBuilding(build, buildPositions);
             allBuildings.Add(build);
+            Destroy(preview.gameObject);
             return true;
         }
         Destroy(preview.gameObject);
@@ -293,7 +294,8 @@ public class BuildingSystem : MonoBehaviour
         
         foreach (Vector3 checkPos in buildPositions)
         {
-            Collider[] hitColliders = Physics.OverlapSphere(new Vector3(math.floor(checkPos.x)+cellSize*0.5f, checkPos.y, math.floor(checkPos.z) + cellSize*0.5f), 0.1f);
+            
+            Collider[] hitColliders = Physics.OverlapSphere(new Vector3(math.floor(checkPos.x)+cellSize*0.5f, checkPos.y, math.floor(checkPos.z) + cellSize*0.5f), 0.4f,LayerMask.GetMask("Default"));
             foreach (Collider hitCollider in hitColliders)
             {
                 Debug.Log(hitCollider.gameObject.name);
