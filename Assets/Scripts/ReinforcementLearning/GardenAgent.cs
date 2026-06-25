@@ -9,12 +9,12 @@ using UnityEngine;
 
 public class GardenAgent : Agent
 {
-    private PillarMath mathComponent;
+    [SerializeField]private PillarMath mathComponent;
     private List<Vector3> allBuildings = new();
     private List<int> allBuildingIds = new();
     private List<Vector3> allFloors = new();
     private List<int> allFloorIds = new();
-
+    public Vector3 MiddlePos;
     [SerializeField] private BuildingSystem buildSystem;
     [SerializeField] private List<BuildingData> buildings = new();
     [SerializeField] private List<FloorData> floors = new();
@@ -41,6 +41,8 @@ public class GardenAgent : Agent
         steps = 0;
         allBuildings.Clear();
         allFloors.Clear();
+        allFloorIds.Clear();
+        allBuildingIds.Clear();
         buildSystem.ResetBuilds();
         mathComponent.Recalculate();
     }
@@ -55,7 +57,7 @@ public class GardenAgent : Agent
 
         for (int i = 0; i < totalTiles; i++)
         {
-            if (allBuildings != null)
+            if (allBuildings.Count > 0)
             {
                 if (allBuildingIds.Count <= i && allBuildings.Count <= i)
                 {
@@ -64,7 +66,7 @@ public class GardenAgent : Agent
                 }
             }
 
-            if (allFloors != null)
+            if (allFloors.Count > 0)
             {
                 if (allFloors.Count <= i && allFloors.Count <= i)
                 {
@@ -79,23 +81,36 @@ public class GardenAgent : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         steps++;
+        print(steps);
         float StartP1 = mathComponent.Pillar1Score;
         float StartP2 = mathComponent.Pillar2Score;
         float StartP3 = mathComponent.Pillar3Score;
         float StartP4 = mathComponent.Pillar4Score;
         
-        Vector3 pos = new Vector3(actions.DiscreteActions[0], actions.DiscreteActions[1], actions.DiscreteActions[2]);
+        Vector3 pos = new Vector3(MiddlePos.x +  actions.DiscreteActions[0], MiddlePos.y + actions.DiscreteActions[1], MiddlePos.z + actions.DiscreteActions[2]);
         int buildingId = actions.DiscreteActions[3];
         int floorId = actions.DiscreteActions[4];
-
-        if(buildingId >= 0 && buildingId < buildings.Count) buildSystem.SetBuilding(pos, buildings[buildingId]);
+        bool build = false;
+        
+        if(buildingId >= 0 && buildingId < buildings.Count) build = buildSystem.SetBuilding(pos, buildings[buildingId]);
         if(floorId >= 0 && floorId < floors.Count) buildSystem.SetFloor(pos - new Vector3(0f,-0.5f,0f), floors[floorId]);
+        
         mathComponent.Recalculate();
         float p1Reward = scoreBase * (mathComponent.Pillar1Score - StartP1) * pillar1Mult;
         float p2Reward = scoreBase * (mathComponent.Pillar2Score - StartP2) * pillar2Mult;
         float p3Reward = scoreBase * (mathComponent.Pillar3Score - StartP3) * pillar3Mult;
         float p4Reward = scoreBase * (mathComponent.Pillar4Score - StartP4) * pillar4Mult;
-        AddReward(p1Reward+p2Reward+p3Reward+p4Reward);
+        
+        if(build) AddReward(80);
+        else if (allBuildings.Count < 9) AddReward(-30);
+        if (p1Reward + p2Reward + p3Reward + p4Reward < 10 )
+        {
+        }
+        else
+        { 
+            AddReward(p1Reward+p2Reward+p3Reward+p4Reward);
+
+        }
         if(steps > MAX_STEPS) EndEpisode();
     }
 

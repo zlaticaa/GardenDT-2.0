@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4276968681176808801}
   - component: {fileID: 2105157353473826795}
+  - component: {fileID: -7168834400656208999}
   m_Layer: 0
   m_Name: NoBuildFloor
   m_TagString: Untagged
@@ -46,6 +47,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingModel
   wrapper: {fileID: 2508415886477478336}
+--- !u!65 &-7168834400656208999
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2777254038213304906}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7197808265405453267
 GameObject:
   m_ObjectHideFlags: 0

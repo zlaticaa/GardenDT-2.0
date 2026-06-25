@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1782383001",
+        "python_version": "3.10.12 (main, Jul  5 2023, 18:54:27) [GCC 11.2.0]",
+        "command_line_arguments": "/home/nyaccoon/miniconda3/envs/mlagents/bin/mlagents-learn Config/Sac/GridWorld.yaml --run-id=firstRun",
+        "mlagents_version": "1.1.0",
+        "mlagents_envs_version": "1.1.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.2.2+cu121",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1782383009"
+    },
+    "total": 8.185255942000026,
+    "count": 1,
+    "self": 0.004469177000032687,
+    "children": {
+        "run_training.setup": {
+            "total": 0.011648808000018107,
+            "count": 1,
+            "self": 0.011648808000018107
+        },
+        "TrainerController.start_learning": {
+            "total": 8.169137956999975,
+            "count": 1,
+            "self": 4.892399999789632e-05,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 8.169073271999991,
+                    "count": 1,
+                    "self": 8.169073271999991
+                },
+                "TrainerController._save_models": {
+                    "total": 1.5760999986014212e-05,
+                    "count": 1,
+                    "self": 1.5760999986014212e-05
+                }
+            }
+        }
+    }
+}
