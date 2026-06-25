@@ -109,8 +109,7 @@ public class GardenAgent : Agent
         float p3Reward = scoreBase * (mathComponent.Pillar3Score - StartP3) * pillar3Mult;
         float p4Reward = scoreBase * (mathComponent.Pillar4Score - StartP4) * pillar4Mult;
         
-        if(build) AddReward(0.8f);
-        else if (allBuildings.Count < 9) AddReward(-0.3f); 
+        if(build) AddReward(-0.1f);
         AddReward(p1Reward+p2Reward+p3Reward+p4Reward);
         if(steps > MAX_STEPS) EndEpisode();
         int size = 0;

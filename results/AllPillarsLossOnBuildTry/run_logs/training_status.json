@@ -1,0 +1,38 @@
+{
+    "GridWorld": {
+        "checkpoints": [
+            {
+                "steps": 5935,
+                "file_path": "results/AllPillarsLossOnBuildTry/GridWorld/GridWorld-5935.onnx",
+                "reward": null,
+                "creation_time": 1782394815.414856,
+                "auxillary_file_paths": [
+                    "results/AllPillarsLossOnBuildTry/GridWorld/GridWorld-5935.pt"
+                ]
+            },
+            {
+                "steps": 6934,
+                "file_path": "results/AllPillarsLossOnBuildTry/GridWorld/GridWorld-6934.onnx",
+                "reward": null,
+                "creation_time": 1782394853.501179,
+                "auxillary_file_paths": [
+                    "results/AllPillarsLossOnBuildTry/GridWorld/GridWorld-6934.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 6934,
+            "file_path": "results/AllPillarsLossOnBuildTry/GridWorld.onnx",
+            "reward": null,
+            "creation_time": 1782394853.501179,
+            "auxillary_file_paths": [
+                "results/AllPillarsLossOnBuildTry/GridWorld/GridWorld-6934.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
