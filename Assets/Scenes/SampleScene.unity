@@ -4104,7 +4104,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2bec5d0598302de40b3345594ce8d3f9, type: 2}
   - {fileID: 11400000, guid: f07e20720725a0e4585c340eeaf4a0b8, type: 2}
   - {fileID: 11400000, guid: f447b10262944704bb6f4f692a0a5dec, type: 2}
-  scoreBase: 100
+  scoreBase: 1
   pillar1Mult: 1
   pillar2Mult: 1
   pillar3Mult: 1
@@ -4128,15 +4128,15 @@ MonoBehaviour:
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 04000000040000000600000007000000
-    VectorActionSize: 04000000040000000600000007000000
+      BranchSizes: 03000000030000000600000007000000
+    VectorActionSize: 03000000030000000600000007000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
-  m_InferenceDevice: 0
+  m_InferenceDevice: 2
   m_BehaviorType: 0
-  m_BehaviorName: My Behavior
+  m_BehaviorName: GridWorld
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
