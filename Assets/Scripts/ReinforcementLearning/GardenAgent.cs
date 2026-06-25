@@ -106,7 +106,13 @@ public class GardenAgent : Agent
         else if (allBuildings.Count < 9) AddReward(-0.3f); 
         AddReward(p1Reward+p2Reward+p3Reward+p4Reward);
         if(steps > MAX_STEPS) EndEpisode();
-        if(allBuildings.Count >= 9)  EndEpisode();
+        int size = 0;
+        foreach (var i in allBuildingIds)
+        {
+            if (buildings[i].name == "TrampolineData") size += 4;
+            else size++;
+        }
+        if(size >= 9)  EndEpisode();
     }
 
     private void CheckLists()
