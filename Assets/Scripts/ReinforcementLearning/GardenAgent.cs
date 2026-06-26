@@ -31,18 +31,52 @@ public class GardenAgent : Agent
     private const int MAX_STEPS = 300;
     private int totalTiles;
 
-    public void Start()
+    private DecisionRequester decisionRequester;
+
+    void Awake()
     {
-        totalTiles = height* width;
+        decisionRequester = GetComponent<DecisionRequester>();
+
+        if (decisionRequester != null)
+            decisionRequester.enabled = false;
+
+        totalTiles = height * width;
         steps = 0;
+
         PillarSettings.Insects = true;
         PillarSettings.Birds = true;
-        PillarSettings.Spiders =  true;
-        PillarSettings.OtherAnimals =  true;
+        PillarSettings.Spiders = true;
+        PillarSettings.OtherAnimals = true;
         PillarSettings.cleanup = fertilizerCleanupType.CleanAll;
         PillarSettings.fertilizer = fertilizerCleanupType.BioFertilizer;
         PillarSettings.nrOfPlants = 20;
     }
+
+    void Start()
+    {
+        StopTraining(); 
+    }
+
+    public void StartTraining()
+    {
+        gameObject.SetActive(true);
+
+        if (decisionRequester != null)
+            decisionRequester.enabled = true;
+
+        steps = 0;
+        OnEpisodeBegin();
+    }
+
+    public void StopTraining()
+    {
+        if (decisionRequester != null)
+            decisionRequester.enabled = false;
+
+        EndEpisode();
+        gameObject.SetActive(false);
+    }
+
 
     public override void OnEpisodeBegin()
     {
