@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Unity.Mathematics;
 using UnityEngine;
 
 
@@ -49,6 +51,23 @@ public class BuildingSystem : MonoBehaviour
 
     private void Start()
     {
+        InstantiateFloor();
+    }
+
+    public void ResetBuilds()
+    {
+        foreach (var building in allBuildings)
+        {
+            Destroy(building.gameObject);
+        }
+
+        foreach (var floor in allFloors)
+        {
+            Destroy(floor.gameObject);
+        }
+        allBuildings.Clear();
+        allFloors.Clear();
+        grid.CreateEmptyGrid();
         InstantiateFloor();
     }
 
@@ -148,6 +167,7 @@ public class BuildingSystem : MonoBehaviour
         {
             buildingPreview.ChangeState(Support.PreviewState.Negative);
         }
+        
 
         if (Input.GetKeyDown(KeyCode.Delete))
         {
@@ -156,6 +176,39 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
+    public bool SetBuilding(Vector3 pos, BuildingData data)
+    {
+        BuildingPreview preview = CreateBuildingPreview(data, pos);
+        List<Vector3> buildPositions = preview.buildingModel.GetAllBuildingPositions();
+        bool canBuild = grid.CanBuildBuilding(buildPositions);
+        if (canBuild)
+        {
+            Building build = Instantiate(buildingPrefab, GetSnappedCentrePosition(buildPositions), Quaternion.identity);
+            build.Setup(data);
+            grid.SetBuilding(build, buildPositions);
+            allBuildings.Add(build);
+            Destroy(preview.gameObject);
+            return true;
+        }
+        Destroy(preview.gameObject);
+        return false;
+
+    }
+
+    public void SetFloor(Vector3 pos, FloorData data)
+    {
+       BuildingPreview preview = CreateFloorPreview(data, pos);
+       List<Vector3> buildPositions = preview.buildingModel.GetAllBuildingPositions();
+       
+       DestroyObject(buildPositions);
+       FloorBuilding floor = Instantiate(floorBuildingPrefab, GetSnappedCentrePosition(buildPositions), Quaternion.identity);
+       floor.Setup(data);
+       floor.transform.position -= new Vector3(0f, 0.5f, 0f);
+       grid.SetFloor(floor,buildPositions);
+       allFloors.Add(floor);
+       
+       Destroy(preview.gameObject);
+    }
     public void HandleFloorPreview(Vector3 mouseWorldPos, bool force = false)
     {
         floorPreview.transform.position = mouseWorldPos;
@@ -196,7 +249,7 @@ public class BuildingSystem : MonoBehaviour
 
     private void PlaceFloor(List<Vector3> buildingPositions)
     {
-        DestroyObject();
+        DestroyObject(buildingPositions);
 
         FloorBuilding floorBuilding = Instantiate(floorBuildingPrefab, floorPreview.transform.position, Quaternion.identity);
         floorBuilding.Setup(floorPreview.floorData);
@@ -236,18 +289,28 @@ public class BuildingSystem : MonoBehaviour
         return hitObject;
     }
 
-    private void DestroyObject()
+    private void DestroyObject(List<Vector3> buildPositions)
     {
-        GameObject objectToDestroy = GetHitObject();
-        Debug.Log(objectToDestroy);
-        if(objectToDestroy != null)
+        
+        foreach (Vector3 checkPos in buildPositions)
         {
-            Destroy(objectToDestroy);
+            
+            Collider[] hitColliders = Physics.OverlapSphere(new Vector3(math.floor(checkPos.x)+cellSize*0.5f, checkPos.y, math.floor(checkPos.z) + cellSize*0.5f), 0.4f,LayerMask.GetMask("Default"));
+            foreach (Collider hitCollider in hitColliders)
+            {
+                Debug.Log(hitCollider.gameObject.name);
+                allFloors.Remove(hitCollider.gameObject.GetComponent<FloorBuilding>());
+                if(hitCollider.gameObject != null)
+                {
+                    Destroy(hitCollider.gameObject);
+                }
+                else
+                {
+                    Debug.Log("No object to destroy");
+                }
+            }
         }
-        else
-        {
-            Debug.Log("No object to destroy");
-        }
+       
     }
 
     private void InstantiateFloor()

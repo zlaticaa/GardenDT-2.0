@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PillarSettings : MonoBehaviour
+public static class PillarSettings 
 {
     public static bool Insects = false;
     public static bool Birds = false;

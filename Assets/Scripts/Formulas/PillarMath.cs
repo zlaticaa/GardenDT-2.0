@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class PillarMath : MonoBehaviour
 {
-    [SerializeField] private BuildingSystem bSystem; private List<Building> allBuildings = new();
+    [SerializeField] private BuildingSystem bSystem; 
+    [SerializeField] private List<Building> allBuildings = new();
     [SerializeField] private List<FloorBuilding> allFloors = new();
 
     private int nrOfPaved;
@@ -55,7 +56,7 @@ public class PillarMath : MonoBehaviour
         GetAllNumbers(allBuildings, allFloors);
         CalculateAllPillars();
         
-        Debug.Log((allBuildings.Count+ allFloors.Count) + " = " + totalArea + "; " + (totalPlants/totalArea));
+        Debug.Log("buildings: "+allBuildings.Count + "floors: "+allFloors.Count );
         
         FindFirstObjectByType<PillarUI>()?.UpdateUI();
     }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5908581010199000119}
   - component: {fileID: 6277748477459651085}
+  - component: {fileID: 4477019268563088499}
   m_Layer: 0
   m_Name: FloorBuilding
   m_TagString: Untagged
@@ -44,3 +45,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97cf46b09407db84c86db825443f0dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorBuilding
+--- !u!65 &4477019268563088499
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270070802335651209}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
