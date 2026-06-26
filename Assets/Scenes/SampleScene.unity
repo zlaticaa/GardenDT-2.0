@@ -6094,6 +6094,29 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
+  mathComponent: {fileID: 0}
+  MiddlePos: {x: 0, y: 0, z: 0}
+  buildSystem: {fileID: 1491958051}
+  buildings:
+  - {fileID: 11400000, guid: 3228e4294d22d9d49b478a68de860679, type: 2}
+  - {fileID: 11400000, guid: 88f2b3911bfdc1643b506504b880d527, type: 2}
+  - {fileID: 11400000, guid: a7469e9a22579dc419d256a57e17d294, type: 2}
+  - {fileID: 11400000, guid: a2c28cbf176cf2c46ab60a3ba7e4369f, type: 2}
+  - {fileID: 11400000, guid: 8203737404d6d2142a51594a8ec3d400, type: 2}
+  floors:
+  - {fileID: 11400000, guid: ef052b2e7fe09ea4599c3fdba2f75f3f, type: 2}
+  - {fileID: 11400000, guid: 6ae3d92b2d7088241be1374edaea78de, type: 2}
+  - {fileID: 11400000, guid: 07f3aab5726f24b4e84115251842d033, type: 2}
+  - {fileID: 11400000, guid: 2bec5d0598302de40b3345594ce8d3f9, type: 2}
+  - {fileID: 11400000, guid: f07e20720725a0e4585c340eeaf4a0b8, type: 2}
+  - {fileID: 11400000, guid: f447b10262944704bb6f4f692a0a5dec, type: 2}
+  scoreBase: 1
+  pillar1Mult: 1
+  pillar2Mult: 1
+  pillar3Mult: 1
+  pillar4Mult: 1
+  width: 3
+  height: 3
 --- !u!114 &1155422122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6111,13 +6134,13 @@ MonoBehaviour:
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 01000000
-    VectorActionSize: 01000000
+      BranchSizes: 03000000030000000600000007000000
+    VectorActionSize: 03000000030000000600000007000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
-  m_InferenceDevice: 0
+  m_InferenceDevice: 2
   m_BehaviorType: 0
   m_BehaviorName: My Behavior
   TeamId: 0
@@ -6910,6 +6933,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PillarMath
   bSystem: {fileID: 1491958051}
+  allBuildings: []
   allFloors: []
   fertilizer: 8
   cleanupStyle: 1
