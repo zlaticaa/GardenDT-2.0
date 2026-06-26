@@ -17,4 +17,9 @@ public class SceneFlowManager : MonoBehaviour
     {
         SceneManager.LoadScene("SampleScene");
     }
+
+    public void LoadGardenSavingsScene()
+    {
+        SceneManager.LoadScene("LoadGardenScene");
+    }
 }
