@@ -52,6 +52,7 @@ public class BuildingSystem : MonoBehaviour
     private void Start()
     {
         InstantiateFloor();
+        pillarMath.ResetMath();
     }
 
     public void ResetBuilds()
