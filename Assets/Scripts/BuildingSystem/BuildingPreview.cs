@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// Handles the preview of a building before it gets placed
+/// This class handles both building previews and floor previews
+/// </summary>
 public class BuildingPreview : MonoBehaviour
 {
     [SerializeField] private Material PositiveMaterial;
@@ -14,6 +18,10 @@ public class BuildingPreview : MonoBehaviour
     private List<Renderer> renderers = new();
     private List<Collider> colliders = new();
 
+    /// <summary>
+    /// Sets instances for buidlings
+    /// </summary>
+    /// <param name="data"></param>
     public void Setup(BuildingData data)
     {
         buildingData = data;
@@ -28,6 +36,10 @@ public class BuildingPreview : MonoBehaviour
         SetPreviewMaterial(previewState);
     }
 
+    /// <summary>
+    /// Sets instances for floors
+    /// </summary>
+    /// <param name="data"></param>
     public void Setup(FloorData data)
     {
         floorData = data;
@@ -43,6 +55,10 @@ public class BuildingPreview : MonoBehaviour
         SetPreviewMaterial(previewState);
     }
 
+    /// <summary>
+    /// Changes the state of the preview
+    /// </summary>
+    /// <param name="state"></param>
     public void ChangeState(Support.PreviewState state)
     {
         if (state == previewState) return;
@@ -50,6 +66,10 @@ public class BuildingPreview : MonoBehaviour
         SetPreviewMaterial(previewState);
     }
 
+    /// <summary>
+    /// Sets the material of the preview based on whether the building or floor can be placed or not
+    /// </summary>
+    /// <param name="state"></param>
     private void SetPreviewMaterial(Support.PreviewState state)
     {
         Material previewMat = state == Support.PreviewState.Positive ? PositiveMaterial : NegativeMaterial;

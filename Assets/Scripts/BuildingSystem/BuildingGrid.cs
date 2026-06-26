@@ -1,19 +1,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Creates, builds and draws the grid
+/// </summary>
 public class BuildingGrid : MonoBehaviour
 {
     private int width = Support.GridWidth;
     private int height = Support.GridHeight;
     private BuildingGridCell[,] grid;
     private LineRenderer _lineRenderer;
-    [SerializeField] private float lineWidth = 0.1f;
-    
+    [SerializeField] private float lineWidth = 0.03f;
+
+    /// <summary>
+    /// When the object this script is a component of starts, the floor grid is generated.
+    /// </summary>
     private void Start()
     {
         CreateEmptyGrid();
     }
 
+    /// <summary>
+    /// Sets a building to the grid
+    /// </summary>
+    /// <param name="building"></param>
+    /// <param name="allBuildingPositions"></param>
     public void SetBuilding(Building building, List<Vector3> allBuildingPositions)
     {
         foreach (var p in allBuildingPositions)
@@ -23,6 +34,11 @@ public class BuildingGrid : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets a floor to the grid
+    /// </summary>
+    /// <param name="floorBuilding"></param>
+    /// <param name="allBuildingPositions"></param>
     public void SetFloor(FloorBuilding floorBuilding, List<Vector3> allBuildingPositions)
     {
         foreach (var p in allBuildingPositions)
@@ -32,6 +48,12 @@ public class BuildingGrid : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks if a building can be placed. 
+    /// Returns false if the building isn't on the grid or if another building already exists in that spot.
+    /// </summary>
+    /// <param name="allBuildingPositions"></param>
+    /// <returns></returns>
     public bool CanBuildBuilding(List<Vector3> allBuildingPositions)
     {
         foreach (var p in allBuildingPositions)
@@ -43,6 +65,12 @@ public class BuildingGrid : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Checks if a floor can be placed.
+    /// Returns false if the floor isn't on the grid.
+    /// </summary>
+    /// <param name="allBuildingPositions"></param>
+    /// <returns></returns>
     public bool CanBuildFloor(List<Vector3> allBuildingPositions)
     {
         foreach (var p in allBuildingPositions)
@@ -53,6 +81,11 @@ public class BuildingGrid : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Converts the worldposition to a gridposition
+    /// </summary>
+    /// <param name="worldPosition"></param>
+    /// <returns></returns>
     private (int x, int y) WorldToGridPosition(Vector3 worldPosition)
     {
         int x = Mathf.FloorToInt((worldPosition - transform.position).x / BuildingSystem.cellSize);
@@ -60,6 +93,11 @@ public class BuildingGrid : MonoBehaviour
         return (x, y);
     }
 
+    /// <summary>
+    /// Draws the lines of the grid using the line renderer
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="width"></param>
     private void DrawLine(Vector3[] pos, float width)
     {
         GameObject newLine = new GameObject("Line");
@@ -74,6 +112,10 @@ public class BuildingGrid : MonoBehaviour
         _lineRenderer.SetPositions(pos);
         
     }
+
+    /// <summary>
+    /// Draws the grid
+    /// </summary>
     public void DrawLineGrid()
     {
         
@@ -111,8 +153,9 @@ public class BuildingGrid : MonoBehaviour
     }
 }
 
-
-
+/// <summary>
+/// An object that gets used in a list to check if a building already exists at a certain position
+/// </summary>
 public class BuildingGridCell
 {
     private Building building;

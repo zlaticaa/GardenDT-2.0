@@ -1,5 +1,5 @@
 using UnityEngine.Experimental.GlobalIllumination;
-//enums for lookup table pillar 2
+//enum for lookup table pillar 2
 public enum fertilizerCleanupType
 {
     CleanAll = 1,
@@ -10,6 +10,9 @@ public enum fertilizerCleanupType
     BioFertilizer = 32
 }
 
+/// <summary>
+/// A static class for all formula parameters
+/// </summary>
 public static class FormulaParam
 {
   //normalizes p1 so a plot of all trees isn't 15 but 10    
