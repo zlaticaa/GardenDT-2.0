@@ -6,6 +6,9 @@ using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
+/// <summary>
+/// An agent class for the suggestion AI
+/// </summary>
 public class GardenAgent : Agent
 {
     private int observationsCounter = 0;
@@ -13,6 +16,10 @@ public class GardenAgent : Agent
     private List<Vector3> allBuildings = new();
     private List<Vector3> allFloors = new();
 
+    /// <summary>
+    /// Collects all observations
+    /// </summary>
+    /// <param name="sensor"></param>
     public override void CollectObservations(VectorSensor sensor)
     {
         CheckLists();
@@ -42,6 +49,10 @@ public class GardenAgent : Agent
         // float actionTree = actionBuffers.DiscreetActions[0];
     }
 
+    /// <summary>
+    /// Checks if no lists are null and converts from building or floor to vector3
+    /// </summary>
+    /// <exception cref="NullReferenceException"></exception>
     private void CheckLists()
     {
         if(mathComponent.GetAllBuildings() != null)
@@ -67,7 +78,7 @@ public class GardenAgent : Agent
         }
         else
         {
-            throw new NullReferenceException("Error: list allBuildings is void.");
+            throw new NullReferenceException("Error: list allFloors is void.");
         }
     }
 }
