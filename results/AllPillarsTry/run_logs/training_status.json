@@ -1,0 +1,29 @@
+{
+    "GridWorld": {
+        "checkpoints": [
+            {
+                "steps": 11744,
+                "file_path": "results/AllPillarsTry/GridWorld/GridWorld-11744.onnx",
+                "reward": null,
+                "creation_time": 1782394366.9739668,
+                "auxillary_file_paths": [
+                    "results/AllPillarsTry/GridWorld/GridWorld-11744.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 11744,
+            "file_path": "results/AllPillarsTry/GridWorld.onnx",
+            "reward": null,
+            "creation_time": 1782394366.9739668,
+            "auxillary_file_paths": [
+                "results/AllPillarsTry/GridWorld/GridWorld-11744.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
