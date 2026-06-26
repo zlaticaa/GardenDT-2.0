@@ -1,10 +1,22 @@
-
-
 using System;
-using System.ComponentModel;
 
+/// <summary>
+/// A static class for all formulas
+/// </summary>
 public static class StaticFormulas
 {
+    /// <summary>
+    /// Calculates pillar 1
+    /// </summary>
+    /// <param name="totalArea"></param>
+    /// <param name="tiledArea"></param>
+    /// <param name="seepthroughArea"></param>
+    /// <param name="dirtArea"></param>
+    /// <param name="flowerArea"></param>
+    /// <param name="grassArea"></param>
+    /// <param name="bushArea"></param>
+    /// <param name="treeArea"></param>
+    /// <returns></returns>
     public static float P1Water(int totalArea, int tiledArea, int seepthroughArea, int dirtArea, int flowerArea, int grassArea, int bushArea, int treeArea)
     {
         float res = (tiledArea*FormulaParam.TileCoefficient + 
@@ -19,6 +31,14 @@ public static class StaticFormulas
         return res;
     }
 
+    /// <summary>
+    /// Calculates pillar 2
+    /// </summary>
+    /// <param name="fertilizer"></param>
+    /// <param name="cleanupStyle"></param>
+    /// <param name="growthArea"></param>
+    /// <param name="totalArea"></param>
+    /// <returns></returns>
     public static float P2Soil(fertilizerCleanupType fertilizer, fertilizerCleanupType cleanupStyle, float growthArea, int totalArea)
     {
         int input = (int)cleanupStyle + (int)fertilizer;
@@ -59,6 +79,16 @@ public static class StaticFormulas
         return res * ((float)growthArea/(float)totalArea); 
     }
 
+    /// <summary>
+    /// Calculates pillar 3
+    /// </summary>
+    /// <param name="insects"></param>
+    /// <param name="birds"></param>
+    /// <param name="spiders"></param>
+    /// <param name="others"></param>
+    /// <param name="growthArea"></param>
+    /// <param name="totalArea"></param>
+    /// <returns></returns>
     public static float P3Environment(bool insects, bool birds, bool spiders, bool others,
         int growthArea, int totalArea)
     {
@@ -71,6 +101,16 @@ public static class StaticFormulas
         return (insectVar + birdVar + spiderVar + otherVar);
     }
 
+    /// <summary>
+    /// Calculates pillar 4
+    /// </summary>
+    /// <param name="flowerArea"></param>
+    /// <param name="grassArea"></param>
+    /// <param name="bushArea"></param>
+    /// <param name="treeArea"></param>
+    /// <param name="totalArea"></param>
+    /// <param name="amountOfPlantTypes"></param>
+    /// <returns></returns>
     public static float P4PlantDiversity(int flowerArea, int grassArea, int bushArea, int treeArea, int totalArea, int amountOfPlantTypes)
     {
         float plantDiverseConst = 0;
@@ -90,4 +130,3 @@ public static class StaticFormulas
     }
     
 }
-
