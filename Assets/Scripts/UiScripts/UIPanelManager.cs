@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviour
     public GameObject panelPillarsInput;
 
     public GameObject panelSaveGarden;
-    public GameObject panelLoadGarden;
+ 
 
 
 
@@ -17,7 +17,6 @@ public class UIManager : MonoBehaviour
         ShowPanelFloor();
         panelPillarsInput.SetActive(false);
         panelSaveGarden.SetActive(false);
-        panelLoadGarden.SetActive(false);
     }
 
     public void ShowPanelFloor()
@@ -43,13 +42,4 @@ public class UIManager : MonoBehaviour
         panelSaveGarden.SetActive(true);
    }
 
-    public void ClosePanelLoadGarden()
-    {
-        panelLoadGarden.SetActive(false);
-    }
-
-    public void OpenPanelLoadGarden()
-    {
-        panelLoadGarden.SetActive(true);
-    }
 }
