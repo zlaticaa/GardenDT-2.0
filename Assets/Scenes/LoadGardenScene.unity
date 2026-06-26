@@ -1385,6 +1385,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 924285242}
     m_Modifications:
+    - target: {fileID: 535679651715895997, guid: d8944527e1abb49438a0c90e8f53bc39, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 872106fd027812e458f7a8c4d231eb8f, type: 3}
+    - target: {fileID: 535679651715895997, guid: d8944527e1abb49438a0c90e8f53bc39, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4133825856627646542, guid: d8944527e1abb49438a0c90e8f53bc39, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

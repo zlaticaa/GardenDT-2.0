@@ -241,4 +241,28 @@ public class PillarMath : MonoBehaviour
     {
         return allFloors;
     }
+
+    public void ResetMath()
+    {
+        pillar1Score = 0f;
+        pillar2Score = 0f;
+        pillar3Score = 0f;
+        pillar4Score = 0f;
+
+        nrOfPaved = 0;
+        nrOfLeakThrough = 0;
+        nrOfUnpaved = 0;
+        nrOfGrass = 0;
+        nrOfFlower = 0;
+        nrOfBush = 0;
+        nrOfTree = 0;
+        totalPlants = 0;
+        totalArea = 0;
+
+        allBuildings = new List<Building>();
+        allFloors = new List<FloorBuilding>();
+
+    }
+
+    
 }

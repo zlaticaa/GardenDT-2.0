@@ -27,18 +27,39 @@ public class GardenAgent : Agent
     [SerializeField] private int width = 3;
     [SerializeField] private int height = 3;
 
+    private bool isRunning;
+
     private int steps;
     private const int MAX_STEPS = 300;
     private int totalTiles;
 
     private DecisionRequester decisionRequester;
 
-    void Awake()
+    void Start()
     {
-        decisionRequester = GetComponent<DecisionRequester>();
+        StopTraining();
+    }
+
+    public void StopTraining()
+    {
+        isRunning = false;
 
         if (decisionRequester != null)
             decisionRequester.enabled = false;
+
+        EndEpisode();
+        buildSystem.ResetBuilds();
+        mathComponent.ResetMath();
+    }
+
+    public void StartTraining()
+    {
+        isRunning = true;
+
+        decisionRequester = GetComponent<DecisionRequester>();
+
+        if (decisionRequester != null)
+            decisionRequester.enabled = false;  
 
         totalTiles = height * width;
         steps = 0;
@@ -50,31 +71,14 @@ public class GardenAgent : Agent
         PillarSettings.cleanup = fertilizerCleanupType.CleanAll;
         PillarSettings.fertilizer = fertilizerCleanupType.BioFertilizer;
         PillarSettings.nrOfPlants = 20;
-    }
 
-    void Start()
-    {
-        StopTraining(); 
-    }
+        buildSystem.ResetBuilds();
+        mathComponent.ResetMath();
 
-    public void StartTraining()
-    {
-        gameObject.SetActive(true);
-
+        OnEpisodeBegin();
+ 
         if (decisionRequester != null)
             decisionRequester.enabled = true;
-
-        steps = 0;
-        OnEpisodeBegin();
-    }
-
-    public void StopTraining()
-    {
-        if (decisionRequester != null)
-            decisionRequester.enabled = false;
-
-        EndEpisode();
-        gameObject.SetActive(false);
     }
 
 
@@ -91,6 +95,9 @@ public class GardenAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+
+        if (!isRunning) return;
+
         mathComponent.Recalculate();
         sensor.AddObservation(mathComponent.Pillar1Score);
         sensor.AddObservation(mathComponent.Pillar2Score);
@@ -122,6 +129,8 @@ public class GardenAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        if (!isRunning) return;
+
         steps++;
         print(steps);
         float StartP1 = mathComponent.Pillar1Score;
