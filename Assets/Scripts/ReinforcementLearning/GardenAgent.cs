@@ -8,6 +8,9 @@ using Unity.MLAgents.Sensors;
 using UnityEngine;
 using Math = Unity.Mathematics.Geometry.Math;
 
+/// <summary>
+/// An agent class for the suggestion AI
+/// </summary>
 public class GardenAgent : Agent
 {
     [SerializeField]private PillarMath mathComponent;
@@ -93,6 +96,10 @@ public class GardenAgent : Agent
         mathComponent.Recalculate();
     }
 
+    /// <summary>
+    /// Collects all observations
+    /// </summary>
+    /// <param name="sensor"></param>
     public override void CollectObservations(VectorSensor sensor)
     {
 
@@ -165,6 +172,10 @@ public class GardenAgent : Agent
         if(size >= 9)  EndEpisode();
     }
 
+    /// <summary>
+    /// Checks if no lists are null and converts from building or floor to vector3
+    /// </summary>
+    /// <exception cref="NullReferenceException"></exception>
     private void CheckLists()
     {
         if(mathComponent.GetAllBuildings() != null)
@@ -198,7 +209,7 @@ public class GardenAgent : Agent
         }
         else
         {
-            throw new NullReferenceException("Error: list allBuildings is void.");
+            throw new NullReferenceException("Error: list allFloors is void.");
         }
     }
 }

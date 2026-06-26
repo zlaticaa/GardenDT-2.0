@@ -1,16 +1,7 @@
 using UnityEngine;
 
-public class BuildingShapeUnit : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-}
+/// <summary>
+/// A class used to determine the positions of buildings
+/// Functionally this class is just a tag and a counter
+/// </summary>
+public class BuildingShapeUnit : MonoBehaviour { }

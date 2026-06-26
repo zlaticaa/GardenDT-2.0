@@ -1,13 +1,14 @@
 using UnityEngine;
-using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 
+/// <summary>
+/// A class for the objects to be built on top of the floor
+/// </summary>
 public class Building : MonoBehaviour
 {
+    // Each instance of this class gets a model to be placed and data to refer to.
     private BuildingModel model;
     private BuildingData data;
+    
     public void Setup(BuildingData data)
     {
         this.data = data;

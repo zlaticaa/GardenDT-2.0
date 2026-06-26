@@ -1,5 +1,8 @@
 using UnityEngine;
  
+/// <summary>
+/// A static support class to store specific information for ease of access
+/// </summary>
 public static class Support
 {
     public static int GridWidth = 3;
