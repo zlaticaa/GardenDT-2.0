@@ -287,7 +287,10 @@ public class BuildingSystem : MonoBehaviour
         // Add Floor to all floors list
         allFloors.Add(floorBuilding);
     }
-
+     /// <summary>
+     /// Gets the floorpiece that needs to be deleted
+     /// </summary>
+     /// <returns></returns>
     private GameObject GetHitObject()
     {
         GameObject hitObject = null;
@@ -308,6 +311,9 @@ public class BuildingSystem : MonoBehaviour
         return hitObject;
     }
 
+    /// <summary>
+    /// Destroys the gameobject that's underneath the mouse position
+    /// </summary>
     private void DestroyObject()
     {
         GameObject objectToDestroy = GetHitObject();
@@ -322,6 +328,9 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Instantiates floor grid
+    /// </summary>
     private void InstantiateFloor()
     {
         for (int x = 0; x < Support.GridWidth; x++)
@@ -341,6 +350,11 @@ public class BuildingSystem : MonoBehaviour
         grid.DrawLineGrid();
     }
 
+    /// <summary>
+    /// Snaps previews to centre position
+    /// </summary>
+    /// <param name="allBuildingPositions"></param>
+    /// <returns></returns>
     private Vector3 GetSnappedCentrePosition(List<Vector3> allBuildingPositions)
     {
         List<int> xs = allBuildingPositions.Select(p => Mathf.FloorToInt(p.x)).ToList();
@@ -350,6 +364,10 @@ public class BuildingSystem : MonoBehaviour
         return new(centreX, 0, centreZ);
     }
 
+    /// <summary>
+    /// Gets the mouse position in relation to the world
+    /// </summary>
+    /// <returns></returns>
     private Vector3 GetWorldMousePosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -361,12 +379,25 @@ public class BuildingSystem : MonoBehaviour
         return Vector3.zero;
     }
 
+    /// <summary>
+    /// Creates buildingpreview with correct data
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="position"></param>
+    /// <returns></returns>
     public BuildingPreview CreateBuildingPreview(BuildingData data, Vector3 position)
     {
         BuildingPreview buildingPreview = Instantiate(previewPrefab, position, Quaternion.identity);
         buildingPreview.Setup(data);
         return buildingPreview;
     }
+
+    /// <summary>
+    /// Creates floorpreview with correct data
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="position"></param>
+    /// <returns></returns>
     public BuildingPreview CreateFloorPreview(FloorData data, Vector3 position)
     {
         BuildingPreview floorPreview = Instantiate(previewPrefab, position, Quaternion.identity);
@@ -374,21 +405,27 @@ public class BuildingSystem : MonoBehaviour
         return floorPreview;
     }
 
+    /// <summary>
+    /// Public getter for allBuildings
+    /// </summary>
+    /// <returns></returns>
     public List<Building> GetAllBuildings()
     {
         return allBuildings;
     }
 
+    /// <summary>
+    /// Public getter for allFloors
+    /// </summary>
+    /// <returns></returns>
     public List<FloorBuilding> GetAllFloors()
     {
         return allFloors;
     }
 
-    private List<Vector3> GetBuildingPositions(List<BuildingShapeUnit> shapeUnits)
-    {
-        return shapeUnits.Select(unit => unit.transform.position).ToList();
-    }
-
+    /// <summary>
+    /// Clears current preview object
+    /// </summary>
     private void ClearCurrentPreview()
     {
         if (buildingPreview != null)
@@ -401,6 +438,10 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Spawns Building with correct data
+    /// </summary>
+    /// <param name="data"></param>
     private void SpawnBuilding(BuildingData data)
     {
         Vector3 pointerPos = GetCurrentPointerWorldPosition();
@@ -411,31 +452,50 @@ public class BuildingSystem : MonoBehaviour
         pillarMath.Recalculate();
     }
 
+    /// <summary>
+    /// Spawns tree in scene
+    /// </summary>
     public void SpawnTree()
     {
         SpawnBuilding(treeData);
     }
 
+    /// <summary>
+    /// Spawns bushes in scene
+    /// </summary>
     public void SpawnBushe()
     {
         SpawnBuilding(bushData);
     }
 
+    /// <summary>
+    /// Spawns flowers in scene
+    /// </summary>
     public void SpawnFlower()
     {
         SpawnBuilding(flowerData);
     }
 
+    /// <summary>
+    /// Spawns vegetable garden in scene
+    /// </summary>
     public void SpawnVegatable()
     {
         SpawnBuilding(vegGarData);
     }
 
+    /// <summary>
+    /// Spawns trampoline in scene
+    /// </summary>
     public void SpawnTramp()
     {
         SpawnBuilding(trampData);
     }
 
+    /// <summary>
+    /// Spawns Floor with correct data
+    /// </summary>
+    /// <param name="data"></param>
     public void SpawnFloor(FloorData data)
     {
         Vector3 pointerPos = GetCurrentPointerWorldPosition();
@@ -446,57 +506,85 @@ public class BuildingSystem : MonoBehaviour
         pillarMath.Recalculate();
     }
 
-
-
+    /// <summary>
+    /// Spawns dirt in scene
+    /// </summary>
     public void SpawnDirt()
     {
         SpawnFloor(dirtData);
     }
 
+    /// <summary>
+    /// Spawns water in scene
+    /// </summary>
     public void SpawnWater()
     {
         SpawnFloor(waterData);
     }
 
+    /// <summary>
+    /// Spawns gravel in scene
+    /// </summary>
     public void SpawnGravel()
     {
         SpawnFloor(gravelData);
     }
 
+    /// <summary>
+    /// Spawns no build in scene
+    /// </summary>
     public void SpawnNoBuild()
     {
         SpawnFloor(noBuildData);
     }
 
+    /// <summary>
+    /// Spawns grass in scene
+    /// </summary>
     public void SpawnGrass()
     {
         SpawnFloor(grassData);
     }
 
+    /// <summary>
+    /// Spawns sand in scene
+    /// </summary>
     public void SpawnSand()
     {
         SpawnFloor(sandData);
     }
 
+    /// <summary>
+    /// Spawns tiles in scene
+    /// </summary>
     public void SpawnTile()
     {
         SpawnFloor(tileData);
     }
 
+    /// <summary>
+    /// Spawns leak through tiles in scene
+    /// </summary>
     public void SpawnLeak()
     {
         SpawnFloor(leakThroughTileData);
     }
 
-
     //Methods for the touch system
-
+    /// <summary>
+    /// Checks if there is touch input
+    /// </summary>
+    /// <returns></returns>
     private bool HasTouchInput()
     {
        return currentTouchPosition != Vector2.zero;
         
     }
 
+    /// <summary>
+    /// Gets mouse position in world based on whether there is touch input
+    /// </summary>
+    /// <returns></returns>
     private Vector3 GetCurrentPointerWorldPosition()
     {
         if (HasTouchInput())
@@ -507,6 +595,10 @@ public class BuildingSystem : MonoBehaviour
         return GetWorldMousePosition();
     }
 
+    /// <summary>
+    /// Gets touch input position in relation to the world
+    /// </summary>
+    /// <returns></returns>
     private Vector3 GetWorldTouchPosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(currentTouchPosition);
@@ -521,6 +613,9 @@ public class BuildingSystem : MonoBehaviour
         return Vector3.zero;
     }
 
+    /// <summary>
+    /// Adds touchpositions on enable
+    /// </summary>
     private void OnEnable()
     {
         if (inputManager == null) return;
@@ -530,6 +625,9 @@ public class BuildingSystem : MonoBehaviour
         inputManager.onEndTouch += OnTouchEnd;
     }
 
+    /// <summary>
+    /// SUbstracts touchpostion on disable
+    /// </summary>
     private void OnDisable()
     {
         if (inputManager == null) return;
@@ -539,6 +637,11 @@ public class BuildingSystem : MonoBehaviour
         inputManager.onEndTouch -= OnTouchEnd;
     }
 
+    /// <summary>
+    /// Updates touch position on start
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="time"></param>
     private void OnTouchStart(Vector2 position, float time)
     {
 
@@ -546,6 +649,10 @@ public class BuildingSystem : MonoBehaviour
         currentTouchPosition = position;
     }
 
+    /// <summary>
+    /// Updates touch position on drag
+    /// </summary>
+    /// <param name="position"></param>
     private void OnTouchDrag(Vector2 position)
     {
         Debug.Log($"[BUILDING] Touch Drag: {position}");
@@ -553,6 +660,11 @@ public class BuildingSystem : MonoBehaviour
         currentTouchPosition = position;
     }
 
+    /// <summary>
+    /// Updates touch position on end and sets touchReleasedThisFrame true
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="time"></param>
     private void OnTouchEnd(Vector2 position, float time)
     {
 
