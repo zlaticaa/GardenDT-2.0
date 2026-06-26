@@ -2,7 +2,10 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 
-
+/// <summary>
+/// A class to create building models.
+/// This class is used for both buildings and floors.
+/// </summary>
 public class BuildingModel : MonoBehaviour
 {
     [SerializeField] private Transform wrapper;

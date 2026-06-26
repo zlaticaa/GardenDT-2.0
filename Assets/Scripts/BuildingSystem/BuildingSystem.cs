@@ -2,21 +2,24 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
-
-//Garden 2
+/// <summary>
+/// Handles the placing of buildings and floors
+/// </summary>
 public class BuildingSystem : MonoBehaviour
 {
     public const float cellSize = 1f;
 
+    // Math component
     [SerializeField] private PillarMath pillarMath;
 
+    // Building Data
     [SerializeField] private BuildingData treeData;
     [SerializeField] private BuildingData bushData;
     [SerializeField] private BuildingData flowerData;
     [SerializeField] private BuildingData vegGarData;
     [SerializeField] private BuildingData trampData;
 
+    // Floor Data
     [SerializeField] private FloorData dirtData;
     [SerializeField] private FloorData grassData;
     [SerializeField] private FloorData gravelData;
@@ -26,44 +29,57 @@ public class BuildingSystem : MonoBehaviour
     [SerializeField] private FloorData waterData;
     [SerializeField] private FloorData noBuildData;
 
+    // Objects necessary for handling
     [SerializeField] private BuildingPreview previewPrefab;
     [SerializeField] private Building buildingPrefab;
     [SerializeField] private FloorBuilding floorBuildingPrefab;
     [SerializeField] private BuildingGrid grid;
     [SerializeField] private FloorBuilding standardFloor;
 
+    // All shapeunits
     private List<BuildingShapeUnit> shapeUnits = new();
 
+    // Preview handlers
     public BuildingPreview buildingPreview;
     public BuildingPreview floorPreview;
 
+    // Lists to save all placed objects
     private List<Building> allBuildings = new();
     private List<FloorBuilding> allFloors = new();
 
 
     //Fields for the touch system
     [SerializeField] private InputManager inputManager;
-
     private Vector2 currentTouchPosition;
     private bool touchReleasedThisFrame;
 
+    /// <summary>
+    /// At the start of this script, the floor is instantiated.
+    /// </summary>
     private void Start()
     {
         InstantiateFloor();
     }
 
+    /// <summary>
+    /// This method is called every tick
+    /// </summary>
     private void Update()
     {
+        // Get the current mouse position in the world
         Vector3 pointerPos = GetCurrentPointerWorldPosition();
 
+        // If a buildingPreview exists, handle buildingPreview
         if (buildingPreview != null)
         {
             HandleBuildingPreview(pointerPos);
         }
+        // If a floorPreview exists, handle floorPreview
         else if (floorPreview != null)
         {
             HandleFloorPreview(pointerPos);
         }
+        // Check if a specific key is pressed. This only works on keyboard and is mainly used for testing and debugging
         else
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -123,17 +139,26 @@ public class BuildingSystem : MonoBehaviour
         touchReleasedThisFrame = false;
     }
 
+    /// <summary>
+    /// Handles the building previews
+    /// </summary>
+    /// <param name="mouseWorldPos"></param>
+    /// <param name="force"></param>
     public void HandleBuildingPreview(Vector3 mouseWorldPos, bool force = false)
     {
+        // Get mousepostition and all building positions
         buildingPreview.transform.position = mouseWorldPos;
         List<Vector3> buildPositions = buildingPreview.buildingModel.GetAllBuildingPositions();
 
+        // Check if a building can be placed
         bool canBuild = grid.CanBuildBuilding(buildPositions);
         if (canBuild)
         {
+            // If can be placed, snap object to centre positions in the grid
             buildingPreview.transform.position = GetSnappedCentrePosition(buildPositions);
             buildingPreview.ChangeState(Support.PreviewState.Positive);
 
+            // Place the building upon input
             if (Input.GetMouseButtonDown(0) || touchReleasedThisFrame || force)
             {
                 foreach (var vec in buildPositions)
@@ -144,37 +169,51 @@ public class BuildingSystem : MonoBehaviour
                 PlaceBuilding(buildPositions);
             }
         }
+        // Change preview state to negative if can't be placed
         else
         {
             buildingPreview.ChangeState(Support.PreviewState.Negative);
         }
 
+        // Delete preview and gameobject on input
         if (Input.GetKeyDown(KeyCode.Delete))
         {
             Destroy(buildingPreview.gameObject);
             buildingPreview = null;
         }
     }
-
+    /// <summary>
+    /// Handles the floor preview
+    /// </summary>
+    /// <param name="mouseWorldPos"></param>
+    /// <param name="force"></param>
     public void HandleFloorPreview(Vector3 mouseWorldPos, bool force = false)
     {
+        // Get mousepostition and all building positions
         floorPreview.transform.position = mouseWorldPos;
         List<Vector3> buildPositions = floorPreview.buildingModel.GetAllBuildingPositions();
+
+        // Check if a building can be placed
         bool canBuild = grid.CanBuildFloor(buildPositions);
         if (canBuild)
         {
+            // If can be placed, snap object to centre positions in the grid
             floorPreview.transform.position = GetSnappedCentrePosition(buildPositions);
             floorPreview.ChangeState(Support.PreviewState.Positive);
+
+            // Place the building upon input
             if (Input.GetMouseButtonDown(0) || touchReleasedThisFrame || force)
             {
                 PlaceFloor(buildPositions);
             }
         }
+        // Change preview state to negative if can't be placed
         else
         {
             floorPreview.ChangeState(Support.PreviewState.Negative);
         }
 
+        // Delete preview and gameobject on input
         if (Input.GetKeyDown(KeyCode.Delete))
         {
             Destroy(floorPreview.gameObject);
@@ -182,27 +221,55 @@ public class BuildingSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Places buildings
+    /// </summary>
+    /// <param name="buildingPositions"></param>
     private void PlaceBuilding(List<Vector3> buildingPositions)
     {
+        // Instantiate Building
         Building building = Instantiate(buildingPrefab, buildingPreview.transform.position, Quaternion.identity);
+        
+        // Setup instance
         building.Setup(buildingPreview.buildingData);
+        
+        // Add shapeunits to list
         shapeUnits.Add(building.GetComponentInChildren<BuildingShapeUnit>());
+
+        // Set the Building on the grid
         grid.SetBuilding(building, buildingPositions);
+
+        // Detroy the preview gameobject
         Destroy(buildingPreview.gameObject);
+
+        // Set preview to be empty
         buildingPreview = null;
 
+        //Add Building to all buildings list
         allBuildings.Add(building);
     }
 
     private void PlaceFloor(List<Vector3> buildingPositions)
     {
+        // Destroy existing floor object
         DestroyObject();
 
+        // Instantiate Floor
         FloorBuilding floorBuilding = Instantiate(floorBuildingPrefab, floorPreview.transform.position, Quaternion.identity);
+
+        // Setup instance
         floorBuilding.Setup(floorPreview.floorData);
+
+        // Change transform to be lower to fit the position of the floor
         floorBuilding.transform.position -= new Vector3(0, 0.5f, 0);
+
+        // Add shapeunits to list
         shapeUnits.Add(floorBuilding.GetComponentInChildren<BuildingShapeUnit>());
+
+        // Set the Floor on the grid
         grid.SetFloor(floorBuilding, buildingPositions);
+
+        // Check if the building is a no build building and add a fake empty building on top to seal the shapeunits
         if(floorPreview.floorData.name == "NoBuildData")
         {
             GameObject fakeBuild = new();
@@ -210,9 +277,14 @@ public class BuildingSystem : MonoBehaviour
             fakeBuild.transform.SetParent(floorBuilding.transform);
             grid.SetBuilding(fakeBuild.GetComponent<Building>(), buildingPositions);
         }
+
+        // Destroy the preview gameobject
         Destroy(floorPreview.gameObject);
+
+        // Set the preview to be empty
         floorPreview = null;
 
+        // Add Floor to all floors list
         allFloors.Add(floorBuilding);
     }
 
