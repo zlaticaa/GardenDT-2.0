@@ -1,9 +1,9 @@
 using UnityEngine;
 
-
+/// <summary>
+/// A scriptable object class to create data for the buildings
+/// </summary>
 [CreateAssetMenu(menuName = "Data/Building")]
-
-// A ScriptableObject class to create data for each Building
 public class BuildingData : ScriptableObject
 {
     // The model to use when instantiating.

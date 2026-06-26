@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// A scriptable object class to create data for the floors
+/// </summary>
 [CreateAssetMenu(menuName = "Data/Floor")]
 public class FloorData : ScriptableObject
 {
